@@ -74,10 +74,20 @@ int swap(TYPE *x, TYPE *y)
 //EX:
 // swap(&x, &y); in arrays: swap(&array[k - 1], &array[k]);
 
+#define ERRPRINTLOG(message)\
+    fprintf(stderr,"%s:%d) %s",__FILE__,__LINE__,message);
+
+#define OUTPRINTLOG(message)\
+    fprintf(stdout,"%s:%d) %s",__FILE__,__LINE__,message);
+
 
 int main(void){
     int (*max) (int, int) = lambda (int, (int x, int y) { x+=1; return x > y ? x : y; });
     printf("::::%d\n", max (45, 2));
+
+    {
+        ERRPRINTLOG("20\% correct as usual morrrrrrty.\n");
+    }
 
     return 0;
 }
