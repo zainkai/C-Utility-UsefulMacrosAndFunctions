@@ -19,9 +19,10 @@
 ** OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE    **
 ** SOFTWARE.                                                                        **
 **************************************************************************************/
-
 #include <stdlib.h>
 #include <stdio.h>
+
+#define DEBUG 0
 
 typedef void* TYPE;
 
@@ -50,12 +51,13 @@ typedef void* TYPE;
     __fn__; \
   })
 //EX:
-// int main (int argc, char **argv)
-// {
-//   int (*max) (int, int) = 
-//     lambda(int, (int x, int y) { return x > y ? x : y; });
-//   int maximum = max(1, 2);
-// }
+// int (*max) (int, int) = lambda(int, (int x, int y) { return x > y ? x : y; });
+// int maximum = max(1, 2);
+//
+// int max = lambda(int, (int x, int y) { return x > y ? x : y; }) (100,200);
+// lambda(void,(void){printf("printy print printy...\n"); })();
+
+
 
 int swap(TYPE *x, TYPE *y)
 {
@@ -74,16 +76,29 @@ int swap(TYPE *x, TYPE *y)
 //EX:
 // swap(&x, &y); in arrays: swap(&array[k - 1], &array[k]);
 
+
 #define ERRPRINTLOG(message)\
     fprintf(stderr,"%s:%d) %s",__FILE__,__LINE__,message);
 
 #define OUTPRINTLOG(message)\
     fprintf(stdout,"%s:%d) %s",__FILE__,__LINE__,message);
 
+#define forloop(floor,ceiling)\
+    int _FORLOOP_INT_;\
+    for(_FORLOOP_INT_ = floor;_FORLOOP_INT_ < ceiling;_FORLOOP_INT_++)
 
+#if DEBUG
 int main(void){
-    int (*max) (int, int) = lambda (int, (int x, int y) { x+=1; return x > y ? x : y; });
-    printf("::::%d\n", max (45, 2));
+    int x = 2;
+    int y = 3;
+
+    forloop(0,3){
+        lambda(void,(void){printf("printy print printy...\n"); })();
+    }
+
+    int max = lambda(int, (int x, int y) { return x > y ? x : y; }) (100,200);
+
+    printf("asdasdasd:%d\n",max);
 
     {
         ERRPRINTLOG("20\% correct as usual morrrrrrty.\n");
@@ -91,3 +106,4 @@ int main(void){
 
     return 0;
 }
+#endif
