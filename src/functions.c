@@ -42,24 +42,26 @@ int swap(TYPE x, TYPE y)
     return EXIT_SUCCESS;
 }
 
-char** strsplit(char* string, char* delims)
+char** strsplit(char* src, int* n_tokens, char* delims)
 {
-    if(string == NULL || delims == NULL){
+    if(src == NULL || delims == NULL){
         return NULL;
     }
 
-    int n_tokens = 1;
-    char* stringcpy = strdup(string);//copy for strtok to destroy.
-    char** strArray = malloc(n_tokens * sizeof(char*));
+    *n_tokens = 1;
+    char* cpy = strdup(src);//copy for strtok to destroy.
+    char** strArray = malloc(*n_tokens * sizeof(char*));
 
-    char* token = strtok(stringcpy,delims);
+    char* token = strtok(cpy,delims);
     while(token != NULL){
-        strArray[n_tokens - 1] = strdup(token);
-        strArray = realloc(strArray, ++n_tokens * sizeof(char*));
+        strArray[*n_tokens - 1] = strdup(token);
+        strArray = realloc(strArray, ++(*n_tokens) * sizeof(char*));
 
         token = strtok(NULL,delims);
     }
 
-    free(stringcpy);
+    *n_tokens -= 1;
+    free(cpy);
+
     return strArray;
 }
