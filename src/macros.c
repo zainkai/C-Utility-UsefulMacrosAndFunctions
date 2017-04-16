@@ -31,6 +31,11 @@ typedef void* TYPE;
 #define ARRAY_SIZE(array) (sizeof(array) / sizeof(array[0]))
 
 //Only works with arrays
+//EX:
+// int values[] = { 1, 2, 3 };
+// foreach(int *v, values) {
+//     printf("value: %d\n", *v);
+// }
 #define foreach(item, array) \
     for(int keep = 1, \
             count = 0,\
@@ -38,51 +43,35 @@ typedef void* TYPE;
         keep && count != size; \
         keep = !keep, count++) \
       for(item = (array) + count; keep; keep = !keep)
-//EX:
-// int values[] = { 1, 2, 3 };
-// foreach(int *v, values) {
-//     printf("value: %d\n", *v);
-// }
 
-#define lambda(return_type, ...) \
-  __extension__ \
-  ({ \
-    return_type __fn__ __VA_ARGS__ \
-    __fn__; \
-  })
+
 //EX:
 // int (*max) (int, int) = lambda(int, (int x, int y) { return x > y ? x : y; });
 // int maximum = max(1, 2);
 //
 // int max = lambda(int, (int x, int y) { return x > y ? x : y; }) (100,200);
 // lambda(void,(void){printf("printy print printy...\n"); })();
+#define lambda(return_type, ...) \
+  __extension__ \
+  ({ \
+    return_type __fn__ __VA_ARGS__ \
+    __fn__; \
+  })
 
-
-
-int swap(TYPE *x, TYPE *y)
-{
-    if(x == NULL || y == NULL){
-        return EXIT_FAILURE;
-    }
-
-    TYPE z; //the same type as chosen in the brackets above
-     
-    z = *x;
-    *x = *y;
-    *y = z;
-
-    return EXIT_SUCCESS;
-}
 //EX:
-// swap(&x, &y); in arrays: swap(&array[k - 1], &array[k]);
-
-
-#define ERRPRINTLOG(message)\
+// ERRPRINTLOG("error occured");
+#define ERRPRINT(message)\
     fprintf(stderr,"%s:%d) %s",__FILE__,__LINE__,message);
 
-#define OUTPRINTLOG(message)\
+//EX:
+// ERRPRINTLOG("useful for debugging");
+#define OUTPRINT(message)\
     fprintf(stdout,"%s:%d) %s",__FILE__,__LINE__,message);
 
+//EX:
+// forloop(0,3){
+//     printf("heyooo");
+// }
 #define forloop(floor,ceiling)\
     int _FORLOOP_INT_;\
     for(_FORLOOP_INT_ = floor;_FORLOOP_INT_ < ceiling;_FORLOOP_INT_++)
@@ -101,8 +90,18 @@ int main(void){
     printf("asdasdasd:%d\n",max);
 
     {
-        ERRPRINTLOG("20\% correct as usual morrrrrrty.\n");
+        ERRPRINT("20\% correct as usual morrrrrrty.\n");
     }
+
+    int values[] = { 1, 2, 3 };
+    foreach(int *v, values) {
+        printf("value: %d\n", *v);
+    }
+    printf("arraysz::%lu\n",ARRAY_SIZE(values));
+
+
+    int* newvalues = malloc(10 * sizeof(int));
+    printf("heap size::%lu\n",ARRAY_SIZE(*newvalues));
 
     return 0;
 }
